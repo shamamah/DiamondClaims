@@ -1,16 +1,8 @@
 view: claimant_injury {
   sql_table_name: dbo.ClaimantInjury ;;
 
-  dimension_group: added {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: added_date {
+    type: date
     convert_tz: no
     datatype: date
     sql: ${TABLE}.added_date ;;
@@ -66,17 +58,8 @@ view: claimant_injury {
     sql: ${TABLE}.claimcontrol_id ;;
   }
 
-  dimension_group: date_of_death {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: date_of_death {
+    type: date
     sql: ${TABLE}.date_of_death ;;
   }
 
@@ -300,36 +283,19 @@ view: claimant_injury {
     sql: ${TABLE}.injurytypecategory_id ;;
   }
 
-  dimension_group: last_modified {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: last_modified_date {
+    type: date
     sql: ${TABLE}.last_modified_date ;;
   }
 
   dimension: medicareproductliabilitytype_id {
+    primary_key: yes
     type: number
     sql: ${TABLE}.medicareproductliabilitytype_id ;;
   }
 
-  dimension_group: pcadded {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: pcadded_date {
+    type: date
     sql: ${TABLE}.pcadded_date ;;
   }
 
@@ -370,6 +336,6 @@ view: claimant_injury {
 
   measure: count {
     type: count
-    drill_fields: [product_brand_name, product_generic_name]
+    #drill_fields: [product_brand_name, product_generic_name]
   }
 }

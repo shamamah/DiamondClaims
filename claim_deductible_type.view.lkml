@@ -11,31 +11,13 @@ view: claim_deductible_type {
     sql: ${TABLE}.dscr ;;
   }
 
-  dimension_group: last_modified {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: last_modified {
+    type: date
     sql: ${TABLE}.last_modified_date ;;
   }
 
-  dimension_group: pcadded {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: pcadded {
+    type: date
     sql: ${TABLE}.pcadded_date ;;
   }
 

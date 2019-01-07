@@ -1,30 +1,20 @@
 view: claimant_activity {
   sql_table_name: dbo.ClaimantActivity ;;
 
-  dimension_group: added {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: compound_primary_key {
+    primary_key: yes
+    hidden: yes
+    type: string
+    sql: CONCAT(${TABLE}.claimcontrol_id, '  ', ${TABLE}.claimant_num, '  ', ${TABLE}.num) ;;
+  }
+
+  dimension: added {
+    type: date
     sql: ${TABLE}.added ;;
   }
 
-  dimension_group: added_date {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: added_date {
+    type: date
     convert_tz: no
     datatype: date
     sql: ${TABLE}.added_date ;;
@@ -50,17 +40,8 @@ view: claimant_activity {
     sql: ${TABLE}.dscr ;;
   }
 
-  dimension_group: last_modified {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: last_modified_date {
+    type: date
     sql: ${TABLE}.last_modified_date ;;
   }
 
@@ -69,17 +50,8 @@ view: claimant_activity {
     sql: ${TABLE}.num ;;
   }
 
-  dimension_group: pcadded {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+  dimension: pcadded_date {
+    type: date
     sql: ${TABLE}.pcadded_date ;;
   }
 
@@ -90,6 +62,6 @@ view: claimant_activity {
 
   measure: count {
     type: count
-    drill_fields: []
+    #drill_fields: []
   }
 }

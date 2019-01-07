@@ -27,6 +27,8 @@ explore: claim_control {
   label: "Diamond Claims"
   view_label: "ClaimControl"
 
+  sql_always_where: ${claim_number} > ''  ;;
+
   join: claimant {
     view_label: "Claimant"
     type: left_outer
@@ -34,11 +36,41 @@ explore: claim_control {
     sql_on: ${claim_control.claimcontrol_id} = ${claimant.claimcontrol_id} ;;
   }
 
+  join: claimant_activity {
+    view_label: "ClaimantActivity"
+    type: left_outer
+    relationship: one_to_many
+    sql_on: ${claimant.claimcontrol_id} = ${claimant_activity.claimcontrol_id}
+      and ${claimant.claimant_num} = ${claimant_activity.claimant_num} ;;
+  }
+
+  join: claimant_injury {
+    view_label: "ClaimantInjury"
+    type: left_outer
+    relationship: one_to_many
+    sql_on: ${claimant.claimcontrol_id} = ${claimant_injury.claimcontrol_id}
+      and ${claimant.claimant_num} = ${claimant_injury.claimant_num} ;;
+  }
+
+  join: claimant_type {
+    view_label: "ClaimantType"
+    type: inner
+    relationship: one_to_many
+    sql_on: ${claimant.claimanttype_id} = ${claimant_type.claimanttype_id} ;;
+  }
+
   join: claim_control_activity {
     view_label: "ClaimControlActivity"
     type: left_outer
     relationship: one_to_many
     sql_on: ${claim_control.claimcontrol_id} = ${claim_control_activity.claimcontrol_id} ;;
+  }
+
+  join: claim_coverage {
+    view_label: "ClaimCoverage"
+    type: left_outer
+    relationship: one_to_many
+    sql_on: ${claim_control.claimcontrol_id} = ${claim_coverage.claimcontrol_id} ;;
   }
 
   join: claim_feature {
@@ -68,6 +100,13 @@ explore: claim_control {
     type: left_outer
     relationship: one_to_many
     sql_on: ${claim_control.claimcontrol_id} = ${claim_deductible.claimcontrol_id} ;;
+  }
+
+  join: claim_deductible_type {
+    view_label: "ClaimDeductibleType"
+    type: inner
+    relationship: one_to_many
+    sql_on: ${claim_deductible.claimdeductibletype_id} = ${claim_deductible_type.claimdeductibletype_id} ;;
   }
 
 }
