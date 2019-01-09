@@ -1,4 +1,4 @@
-view: claim_control_activity {
+view: claim_activity {
   sql_table_name: dbo.ClaimControlActivity ;;
 
   dimension: compound_primary_key {

@@ -1,9 +1,9 @@
-view: claim_level {
-  sql_table_name: dbo.ClaimLevel ;;
+view: claim_transaction_void_reason {
+  sql_table_name: dbo.ClaimTransactionVoidReason ;;
 
-  dimension: claimlevel_id {
+  dimension: claimtransactionvoidreason_id {
     type: number
-    sql: ${TABLE}.claimlevel_id ;;
+    sql: ${TABLE}.claimtransactionvoidreason_id ;;
   }
 
   dimension: dscr {
@@ -42,6 +42,11 @@ view: claim_level {
       year
     ]
     sql: ${TABLE}.pcadded_date ;;
+  }
+
+  dimension: sort_order {
+    type: number
+    sql: ${TABLE}.sort_order ;;
   }
 
   measure: count {

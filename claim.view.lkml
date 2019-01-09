@@ -1,4 +1,4 @@
-view: claim_control {
+view: claim {
   sql_table_name: dbo.ClaimControl ;;
 
   dimension: added {

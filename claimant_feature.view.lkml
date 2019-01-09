@@ -1,4 +1,4 @@
-view: claim_feature {
+view: claimant_feature {
   sql_table_name: dbo.ClaimFeature ;;
 
   dimension: compound_primary_key {
@@ -385,7 +385,7 @@ view: claim_feature {
   measure: count {
     type: sum
     sql: CASE WHEN ${claimfeature_num} IS NULL THEN 0 ELSE 1 END ;;
-    drill_fields: [detail*]
+    #drill_fields: [detail*]
   }
 
   set: detail {
