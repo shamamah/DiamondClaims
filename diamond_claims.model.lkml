@@ -50,11 +50,18 @@ explore: claim {
     sql_on: ${claim.claimcontrol_id} = ${claim_coverage.claimcontrol_id} ;;
   }
 
-  join: claim_financials {
-    view_label: "Claim Financials"
-    type: left_outer
-    relationship: one_to_many
-    sql_on: ${claim.claimcontrol_id} = ${claim_financials.claimcontrol_id} ;;
+  #join: claim_financials {
+  #  view_label: "Claim Financials"
+  #  type: left_outer
+  #  relationship: one_to_many
+  #  sql_on: ${claim.claimcontrol_id} = ${claim_financials.claimcontrol_id} ;;
+  #}
+
+  join: v_claim_financials_claimant_sum {
+    view_label: "Claim"
+    type: inner
+    relationship: one_to_one
+    sql_on: ${claim.claimcontrol_id} = ${v_claim_financials_claimant_sum.claimcontrol_id} ;;
   }
 
   join: claim_limit {
@@ -101,6 +108,14 @@ explore: claim {
     sql_on: ${claim.claimcontrol_id} = ${claimant.claimcontrol_id} ;;
   }
 
+  join: v_claim_financials_features_sum {
+    view_label: "Claimant"
+    type: inner
+    relationship: one_to_one
+    sql_on: ${claimant.claimcontrol_id} = ${v_claim_financials_features_sum.claimcontrol_id}
+      and ${claimant.claimant_num} = ${v_claim_financials_features_sum.claimant_num} ;;
+  }
+
   join: claimant_activity {
     view_label: "Claimant Activity"
     type: left_outer
@@ -144,6 +159,15 @@ explore: claim {
     relationship: one_to_many
     sql_on: ${claim.claimcontrol_id} = ${claimant_feature.claimcontrol_id}
       and ${claimant.claimant_num} = ${claimant_feature.claimant_num} ;;
+  }
+
+  join: v_claim_financials_transactions_sum {
+    view_label: "Claimant Feature"
+    type: inner
+    relationship: one_to_one
+    sql_on: ${claimant_feature.claimcontrol_id} = ${v_claim_financials_transactions_sum.claimcontrol_id}
+      and ${claimant_feature.claimant_num} = ${v_claim_financials_transactions_sum.claimant_num}
+      and ${claimant_feature.claimfeature_num} = ${v_claim_financials_transactions_sum.claimfeature_num} ;;
   }
 
   join: claimant_feature_denial_reason {
@@ -193,49 +217,60 @@ explore: claim {
     sql_on: ${claimant_feature_transaction.claimtransactiontype_id} = ${claimant_feature_transaction_type.claimtransactiontype_id} ;;
   }
 
-  join: claimant_injury {
-    view_label: "Claimant Injury"
+  join: claimant_financials_eop {
+    view_label: "Claimant Financials MTD"
     type: left_outer
     relationship: one_to_many
-    sql_on: ${claimant.claimcontrol_id} = ${claimant_injury.claimcontrol_id}
-      and ${claimant.claimant_num} = ${claimant_injury.claimant_num} ;;
+    sql_on: ${claimant_feature_transaction.claimcontrol_id} = ${claimant_financials_eop.claimcontrol_id}
+      and ${claimant_feature_transaction.claimant_num} = ${claimant_financials_eop.claimant_num}
+      and ${claimant_feature_transaction.claimfeature_num} = ${claimant_financials_eop.claimfeature_num}
+      and ${claimant_financials_eop.claimeoplevel_id} = 3 ;;
+        # ${claimant_financials_eop.claimeoplevel_id} = 3 is for MTD
+    }
+
+    join: claimant_injury {
+      view_label: "Claimant Injury"
+      type: left_outer
+      relationship: one_to_many
+      sql_on: ${claimant.claimcontrol_id} = ${claimant_injury.claimcontrol_id}
+        and ${claimant.claimant_num} = ${claimant_injury.claimant_num} ;;
+    }
+
+    join: claimant_injury_type_category {
+      view_label: "Claimant Injury Type Category"
+      type: left_outer
+      relationship: one_to_many
+      sql_on: ${claimant_injury_type_category.injurytypecategory_id} = ${claimant_injury.injurytypecategory_id} ;;
+    }
+
+    join: claimant_name_link {
+      view_label: "Claimant Name Link"
+      type: left_outer
+      relationship: one_to_many
+      sql_on: ${claimant.claimcontrol_id} = ${claimant_name_link.claimcontrol_id}
+        and ${claimant.claimant_num} = ${claimant_name_link.claimant_num} ;;
+    }
+
+    join: claimant_name {
+      view_label: "Claimant Name"
+      type: inner
+      relationship: one_to_one
+      sql_on: ${claimant_name_link.name_id} = ${claimant_name.name_id} ;;
+    }
+
+    join: claimant_name_source {
+      view_label: "Claimant Name Source"
+      type: inner
+      relationship: one_to_one
+      sql_on: ${claimant_name.nameaddresssource_id} = ${claimant_name_source.nameaddresssource_id} ;;
+    }
+
+    join: claimant_type {
+      view_label: "Claimant Type"
+      type: inner
+      relationship: one_to_many
+      sql_on: ${claimant.claimanttype_id} = ${claimant_type.claimanttype_id} ;;
+    }
+
+
   }
-
-  join: claimant_injury_type_category {
-    view_label: "Claimant Injury Type Category"
-    type: left_outer
-    relationship: one_to_many
-    sql_on: ${claimant_injury_type_category.injurytypecategory_id} = ${claimant_injury.injurytypecategory_id} ;;
-  }
-
-  join: claimant_name_link {
-    view_label: "Claimant Name Link"
-    type: left_outer
-    relationship: one_to_many
-    sql_on: ${claimant.claimcontrol_id} = ${claimant_name_link.claimcontrol_id}
-      and ${claimant.claimant_num} = ${claimant_name_link.claimant_num} ;;
-  }
-
-  join: claimant_name {
-    view_label: "Claimant Name"
-    type: inner
-    relationship: one_to_one
-    sql_on: ${claimant_name_link.name_id} = ${claimant_name.name_id} ;;
-  }
-
-  join: claimant_name_source {
-    view_label: "Claimant Name Source"
-    type: inner
-    relationship: one_to_one
-    sql_on: ${claimant_name.nameaddresssource_id} = ${claimant_name_source.nameaddresssource_id} ;;
-  }
-
-  join: claimant_type {
-    view_label: "Claimant Type"
-    type: inner
-    relationship: one_to_many
-    sql_on: ${claimant.claimanttype_id} = ${claimant_type.claimanttype_id} ;;
-  }
-
-
-}
